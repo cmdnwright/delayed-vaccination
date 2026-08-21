@@ -1,0 +1,29 @@
+# data
+data/raw/
+data/processed/
+data/splits/
+
+# models
+models/
+
+# environment
+.env
+__pycache__/
+*.pyc
+*.pyo
+
+# jupyter
+.ipynb_checkpoints/
+
+# os
+.DS_Store
+Thumbs.db
+
+# vscode settings
+.vscode/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml

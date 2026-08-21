@@ -1,0 +1,170 @@
+paths:
+  project_root: .
+  data_processed_dir: data/processed
+  raw_tycho_path: data/raw/tycho_20251123-214933.csv
+  processed_cases_path: data/processed/texas_measles_processed.csv
+  processed_contact_matrix_path: data/processed/contact_matrix_processed.csv
+
+age_structure:
+  age_group_edges:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - null
+  age_group_labels:
+  - 0-1
+  - 1-2
+  - 2-3
+  - 3-4
+  - 4-5
+  - 5+
+  age_group_widths:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - null
+  n_age_groups: 6
+  n_vaccination_rates: 5
+
+contact_matrix:
+  original_contact_band_width: 5
+  original_contact_band_labels:
+  - 0-5
+  - 5-10
+  - 10-15
+  - 15-20
+  - 20-25
+  - 25-30
+  - 30-35
+  - 35-40
+  - 40-45
+  - 45-50
+  - 50-55
+  - 55-60
+  - 60-65
+  - 65-70
+  - 70-75
+  - 75+
+  raw_contact_matrix_path: data/raw/raw_contact_matrix.csv
+
+data:
+  raw_nhgis_data_path: data/raw/nhgis0001_ts_nominal_state.csv
+  raw_nhgis_codebook_path: data/raw/nhgis0001_ts_nominal_state_codebook.txt
+  tycho_condition_name: MEASLES
+  tycho_country_iso: US
+  tycho_admin1_name: TEXAS
+  temporal_resolution: W
+
+literature:
+  fixed_gamma_per_year: 45.65625
+  fixed_sigma_per_year: 33.20454545454545
+  fixed_maternal_waning_rate_per_year: 1.6
+  r0_literature_range:
+  - 12.0
+  - 18.0
+
+model:
+  default_importation_rate:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  - 2.0
+  stochastic_dt_years: 0.0027378507871321013
+
+calibration:
+  parameter_bounds:
+    beta_0:
+    - 547.875
+    - 821.8125
+    beta_1:
+    - 0.0
+    - 0.6
+    phi:
+    - 0.0
+    - 6.283185307179586
+    gamma:
+    - 0.0
+    - null
+    birth_rate:
+    - 0.0
+    - null
+    death_rate:
+    - 0.0
+    - null
+    vaccination_rates:
+    - 0.0
+    - 1.0
+  calibration_fixed_vaccination_rates:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  calibration_fixed_parameters:
+    gamma: 45.65625
+    sigma: 33.20454545454545
+    maternal_waning_rate: 1.6
+    reporting_rate: 0.15685714285714286
+    birth_rate: null
+    death_rate: null
+    vaccination_rates:
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+    - 0.0
+  particle_filter_n_particles_final: 2000
+  particle_filter_ess_resample_fraction: 0.5
+  if2_n_iterations: 10
+  if2_n_particles: 500
+  if2_cooling_fraction: 0.5
+  if2_initial_perturbation_sd:
+    log_beta_0: 0.02
+    logit_beta_1: 0.02
+    phi: 0.02
+    logit_rho: 0.02
+    log_phi_obs: 0.02
+    logit_seed_fraction: 0.1
+  spin_up_years: 6.0
+  multistart_n_starts: 8
+  multistart_n_particles: 500
+  multistart_seed: 20260817
+  priors:
+    beta_0:
+      dist: lognormal
+      mean_log: 6.508779712793055
+      sd_log: 0.15
+    beta_1:
+      dist: logitnormal
+      mean_logit: -1.0986122886681098
+      sd_logit: 0.75
+    phi:
+      dist: uniform
+      low: 0.0
+      high: 6.283185307179586
+    rho:
+      dist: logitnormal
+      mean_logit: -1.681800933433409
+      sd_logit: 0.25
+    phi_obs:
+      dist: lognormal
+      mean_log: 2.302585092994046
+      sd_log: 1.0
+    seed_fraction:
+      dist: logitnormal
+      mean_logit: -10.81975828421028
+      sd_logit: 1.0
+  stochastic_free_parameters:
+  - beta_0
+  - beta_1
+  - phi
+  - rho
+  - phi_obs
+  - seed_fraction
