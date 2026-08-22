@@ -21,7 +21,7 @@ class CounterfactualResult:
     Attributes
     ----------
     scenario : str
-        name of the scenario run, one of the keys in `EXPERIMENTS`.
+        name of the scenario run, one of the keys in EXPERIMENTS.
     calendar_years : np.ndarray
         calendar years at which the branch was evaluated.
     simulated_incidence : np.ndarray
@@ -102,8 +102,8 @@ def _delayed_schedule(toddler_coverage: float = 0.92, school_entry_coverage: flo
     school_entry_coverage : float
         constant school-entry coverage applied at every calendar year.
     delayed_coverage : float
-        fraction of `toddler_coverage` routed to the delayed-dose
-        channel (`TODDLER_DOSE_CHANNEL + 1`) rather than the on-time one.
+        fraction of toddler_coverage routed to the delayed-dose
+        channel (TODDLER_DOSE_CHANNEL + 1) rather than the on-time one.
 
     Returns
     -------
@@ -131,8 +131,8 @@ def _only_school_age(toddler_coverage: float = 0.2, school_entry_coverage: float
     school_entry_coverage : float
         constant school-entry coverage applied at every calendar year.
     delayed_coverage : float
-        fraction of `toddler_coverage` routed to the delayed-dose
-        channel (`TODDLER_DOSE_CHANNEL + 1`) rather than the on-time one.
+        fraction of toddler_coverage routed to the delayed-dose
+        channel (TODDLER_DOSE_CHANNEL + 1) rather than the on-time one.
 
     Returns
     -------
@@ -149,53 +149,10 @@ def _only_school_age(toddler_coverage: float = 0.2, school_entry_coverage: float
     return schedule
 
 
-def _declining_schedule(decline_start_year: float = 2019.0, decline_end_year: float = 2025.0, start_toddler: float = 0.92, start_school_entry: float = 0.97, final_toddler: float = 0.82, final_school_entry: float = 0.85) -> Callable[[float], np.ndarray]:
-    '''decreasing vaccination rates
-
-    Parameters
-    ----------
-    decline_start_year : float
-        calendar year at which coverage begins declining from its
-        starting level.
-    decline_end_year : float
-        calendar year at which coverage reaches its final, lower level.
-    start_toddler : float
-        toddler-dose coverage before `decline_start_year`.
-    start_school_entry : float
-        school-entry coverage before `decline_start_year`.
-    final_toddler : float
-        toddler-dose coverage at and after `decline_end_year`.
-    final_school_entry : float
-        school-entry coverage at and after `decline_end_year`.
-
-    Returns
-    -------
-    Callable[[float], np.ndarray]
-        calendar-year -> vaccination-rate-vector function, linear in year
-        between `decline_start_year` and `decline_end_year`, flat outside
-        it.
-    '''
-    def schedule(calendar_year: float) -> np.ndarray:
-        y = float(calendar_year)
-        if y <= decline_start_year:
-            frac = 0.0
-        elif y >= decline_end_year:
-            frac = 1.0
-        else:
-            frac = (y - decline_start_year) / (decline_end_year - decline_start_year)
-
-        rates = np.zeros(config['age_structure']['n_vaccination_rates'], dtype=float)
-        rates[TODDLER_DOSE_CHANNEL] = (1 - frac) * start_toddler + frac * final_toddler
-        rates[SCHOOL_ENTRY_CHANNEL] = (1 - frac) * start_school_entry + frac * final_school_entry
-        return rates
-    return schedule
-
-
 EXPERIMENTS: dict[str, Callable[[float], np.ndarray]] = {
     'continued_high_coverage': _flat_schedule(),
     'delayed_schedule': _delayed_schedule(),
     'only_school_age': _only_school_age(),
-    'coverage_decline': _declining_schedule(),
 }
 
 
@@ -206,16 +163,16 @@ def _wrap_calendar_rates(parameters: dict, branch_year: float) -> dict:
     Parameters
     ----------
     parameters : dict
-        model parameters dict, must contain `birth_rate`, `death_rate`,
-        and `vaccination_rates`.
+        model parameters dict, must contain birth_rate, death_rate,
+        and vaccination_rates.
     branch_year : float
         calendar year at which the branch's elapsed-time-0 begins.
 
     Returns
     -------
     dict
-        copy of `parameters` with `birth_rate`, `death_rate`, and
-        `vaccination_rates` wrapped to accept elapsed simulation time
+        copy of parameters with birth_rate, death_rate, and
+        vaccination_rates wrapped to accept elapsed simulation time
         rather than calendar year.
     '''
     wrapped = dict(parameters)
@@ -230,18 +187,18 @@ def run_branch(scenario: str, initial_cloud: stochastic_model.StochasticParticle
     Parameters
     ----------
     scenario : str
-        one of `EXPERIMENTS`' keys, selecting the vaccination schedule to
+        one of EXPERIMENTS' keys, selecting the vaccination schedule to
         run under.
     initial_cloud : stochastic_model.StochasticParticleCloud
         particle cloud to branch from, e.g. the terminal cloud from
-        `calibration.iterated_filtering` or `final_likelihood_evaluation`.
+        calibration.iterated_filtering or final_likelihood_evaluation.
     theta_hat : Mapping[str, float]
-        calibrated parameter point (`beta_0`, `beta_1`, `phi`, `rho`,
-        `phi_obs`), natural scale.
+        calibrated parameter point (beta_0, beta_1, phi, rho,
+        phi_obs), natural scale.
     fixed_parameters : Mapping[str, object]
         model parameters held fixed for calibration (spec section 9):
-        `gamma`, `sigma`, `maternal_waning_rate`, `birth_rate`,
-        `death_rate`, `contact_matrix`.
+        gamma, sigma, maternal_waning_rate, birth_rate,
+        death_rate, contact_matrix.
     calendar_years : np.ndarray
         calendar years at which to evaluate the branch, strictly
         increasing.
@@ -250,10 +207,10 @@ def run_branch(scenario: str, initial_cloud: stochastic_model.StochasticParticle
         observation-model case draws.
     dt : float, optional
         internal simulation step size, by default None (uses
-        `stochastic_model.simulate_interval_batch`'s own default).
+        stochastic_model.simulate_interval_batch's own default).
     importation_rate : np.ndarray
         baseline annual importation hazard by age group, by default
-        `config['model']['default_importation_rate']`.
+        config['model']['default_importation_rate'].
 
     Returns
     -------
@@ -264,7 +221,7 @@ def run_branch(scenario: str, initial_cloud: stochastic_model.StochasticParticle
     Raises
     ------
     ValueError
-        if `scenario` is not a key of `EXPERIMENTS`.
+        if scenario is not a key of EXPERIMENTS.
     '''
     if scenario not in EXPERIMENTS:
         raise ValueError(f'Unknown scenario: {scenario}. Available: {list(EXPERIMENTS.keys())}')
