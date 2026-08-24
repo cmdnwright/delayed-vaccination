@@ -481,7 +481,7 @@ def iterated_filtering(
             log_obs = observation_model.negbin_logpmf(
                 np.full(n_particles, observed_case_counts[k + 1]),
                 rho * total_incidence,
-                float(phi_obs),
+                phi_obs,
             )
 
             # bootstrap article filter likelihood increment
