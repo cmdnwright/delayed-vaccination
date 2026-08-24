@@ -1,10 +1,6 @@
 # data
 data/raw/
 data/processed/
-data/splits/
-
-# models
-models/
 
 # environment
 .env
