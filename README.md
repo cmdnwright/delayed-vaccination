@@ -34,8 +34,12 @@ We calculate the mean cumulative cases at 2000 particles over 25 years of simula
 | Scenario | Mean Cumulative Cases | p-value vs Baseline | Holm Corrected |
 |---|---|---|---|
 | Baseline | 125.2585 | - | - |
-| Delayed | 2697.781 | 1.0e-7 | 2.0e-5|
-| School Age Only | 572617.7665 | 1.0e-7 | 2.0e-5 |
+| Delayed | 2697.781 | 1.0e-5 | 2.0e-5|
+| School Age Only | 572617.7665 | 1.0e-5 | 2.0e-5 |
+
+*The paired sign flip permutation test uses Monte Carlo resampling to approximate the null distribution at 200,000 samples. The minimum p-value is thus* $\frac{2}{n_\text{resamples} + 1} = 9.99995 \times 10^{-6}$ *which is the exact p value reported by both tests. We round that number to* $1.0 \times 10^{-5}$ *for the sake of legibility.*
+
+We also perform a sensitivity sweep over the 3 year old vaccination rate, forward simulating and reporting the mean cumulative cases and 95-5% interval as a function of the vaccination rate.
 
 ## Results
 
@@ -49,11 +53,11 @@ We calculate the mean cumulative cases at 2000 particles over 25 years of simula
 
 ## Limitations and future work
 
-- Historical age stratified disease data of case counts broken down by desired age range is difficult to find. While the age stratified formulation of this model could allow for age level analysis on case dynamics, the lack of this data means the model cannot be validated at this resultion and thus that level of analysis was left out.
+- Historical age stratified disease data of case counts broken down by desired age range is difficult to find. While the age stratified formulation of this model could allow for age level analysis on case dynamics, the lack of this data means the model cannot be validated at this resolution and thus that level of analysis was left out.
 
 - The contact matrix used for this project was binned in 5 year age gaps. While this was used to estimate contacts at the desired level of age stratification, the approach used is an averaging process which assumes contacts within the bin are uniformly distributed across the age range, missing out on real nuance between age ranges. Higher resolution contacts would enable further age specific analysis.
 
-- Seasonal forcing is a key driver of periodicity for measles models. This model implements seasonal forcing using a classic cosine forcing term, but modern models use step forcing functions that can more accurately reflect school terms. Recent research demonstrates that long term epidemic bifurcations are invariant to the shape of seasonal forcing, especially since the majority of the models compartments exist before the school age and the school age population is completely integrated into the rest of the adult population.
+- Seasonal forcing is a key driver of periodicity for measles models. This model implements seasonal forcing using a classic cosine forcing term, but modern models use step forcing functions that can more accurately reflect school terms. Recent research demonstrates that long term epidemic bifurcations are invariant to the shape of seasonal forcing, especially since the majority of the models compartments exist before the school age and the school age population is completely integrated into the rest of the adult population (Papst and Earn 2019).
 
 - The model fits the reporting rate as a constant parameter. Historical results show that the true reporting rate has varied over time, especially at the individual state level. While fitting this parameter allows the model to mitigate some of those effects, a time dependent reporting rate could improve the observation model, though potentially at the cost of identifiability.
 
@@ -96,14 +100,16 @@ pip install -r requirements.txt
 python -m scripts.run_calibration
 python -m scripts.run_validation
 
-# 6. run all notebooks
+# 4. run all notebooks
 ```
+
+Calibration and validation scripts took less than 10 minutes each using up to 8 cores parallelized across particle filter workers. Validation and calibration notebooks require about 20 minutes each for specific plots running on 10 cores. Each experimental simulation takes about 2 minutes on a single core and the sensitivity sweep takes about 20 minutes.
 
 ## Data
 [Project Tycho](https://www.tycho.pitt.edu/)
 - Texas measles case series
 
-[IPMUS NGHS population data](https://www.nhgis.org/)
+[IPMUS NGHIS population data](https://www.nhgis.org/)
 - Population by age filtered for texas in 2020
 
 Fixed epidemiological parameters set using CDC reports, local public health administration data, and peer-reviewed literature. 

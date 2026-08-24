@@ -1,5 +1,5 @@
 # Model Formulation
-We formulate measles transmission as a partially observed continuous time Markov chain. The latent epidemic describes the population level epidemiological state while observed data of reported cases are modeled through a separate stochastic observation process. The model distinguishes explicitly between epidemic process stochasticisity and reporting stochasticisity. 
+We formulate measles transmission as a partially observed continuous time Markov chain. The latent epidemic describes the population level epidemiological state while observed data of reported cases are modeled through a separate stochastic observation process. The model distinguishes explicitly between epidemic process stochasticity and reporting stochasticity. 
 
 The result is a stochastic MSEIR state space model where the latent epidemic produces discrete incidence events that are then converted to reported cases through a negative binomial observation model. This formulation is a better modeling approach than a classical deterministic ODE of epidemic trajectory since case observations are noisy and incomplete. The statistical objective of this stochastic model becomes integration over the unobserved epidemic histories rather than selecting a single deterministic trajectory that minimizes residuals. 
 
@@ -22,7 +22,7 @@ Which do not match $X(t)$ since the number of reported cases does not equal the 
 
 ### Continuous Time Markov Chain
 
-We model the epidemic as a continuous time Markov chain (CTMC). The memoryless property provides that the future state is contidional on the current state and indpendent of all previous states. This process is defined by a collection of $j$ transition events characterized by the state change vector $v_j$ and state and time depenedent intensity $a_j(X, t; \theta)$ for model parameters $\theta$. When $j$ occurs,
+We model the epidemic as a continuous time Markov chain (CTMC). The memoryless property provides that the future state is conditional on the current state and independent of all previous states. This process is defined by a collection of $j$ transition events characterized by the state change vector $v_j$ and state and time depenedent intensity $a_j(X, t; \theta)$ for model parameters $\theta$. When $j$ occurs,
 
 $$X \to X+v_j$$
 
@@ -41,7 +41,7 @@ For an event of type $j$, the transition intensity is
 
 $$P(\text{one event of type j occurs in } [t, t+dt] \mid X(t) = x) = a_j(X,t;\theta)dt + o(dt)$$
 
-meaning intensity is an instantaneous hazard rate rather than a deterministic flow. Consider the exposed to infection transition, which for incudation rate $\sigma$ has intensity
+meaning intensity is an instantaneous hazard rate rather than a deterministic flow. Consider the exposed to infection transition, which for incubation rate $\sigma$ has intensity
 
 $$a_{E \to I, a}(X,t) = \sigma E_a$$
 
@@ -49,7 +49,7 @@ so that
 
 $$P(E_a \to I_a \text{ during } [t, t+dt]) = \sigma E_adt + o(dt)$$
 
-We represent maternal immunity loss $\delta$, recovery rate $\gamma$, birth rate, death rate, aging, and vaccination $v$ throught he same process. We can represent the expected rate of change using the infinetsmal generator of the CTMC for a suitable function $f$
+We represent maternal immunity loss $\delta$, recovery rate $\gamma$, birth rate, death rate, aging, and vaccination $v$ through the same process. We can represent the expected rate of change using the infinetsmal generator of the CTMC for a suitable function $f$
 
 $$\mathcal{L}_tf(x) = \sum_j a_j(X,t;\theta)(f(x+v_j) - f(x))$$
 
@@ -117,7 +117,7 @@ $$\text{Var}(Y_t \mid C_t) = \mu_t + \frac{\mu_t^2}{\phi_{\text{obs}}}$$
 
 representing both incomplete reporting and extra Poisson variability.
 
-Process noise and observation noise are treated as distinct sources of variability. Process noise is from stochastic transitions and determine $X(t)$ while observation noise is from reporting and determines $Y_t \mid C_t$. We assume observations are in depended across intervals conditional on latent incidence counts so the conditional distribution is 
+Process noise and observation noise are treated as distinct sources of variability. Process noise is from stochastic transitions and determine $X(t)$ while observation noise is from reporting and determines $Y_t \mid C_t$. We assume observations are independent across intervals conditional on latent incidence counts so the conditional distribution is 
 
 $$p_\theta(Y_{1:T} \mid X_{0:T}) = \prod_{t=1}^Tp_\theta(Y_{t} \mid C_{t})$$
 
@@ -129,7 +129,7 @@ $$p_\theta(X_{0:T}, Y_{1:T}) = p_\theta(x_0)p_\theta(x_{0:T} \mid x_0)\prod_{t=1
 The first term specifies the initial state distribution, the second is induced by the Markov chain, and the final product is the observation model. Since the epidemic trajectory is unobserved, inference is based on the marginal likelihood
 
 $$\mathcal{L}(\theta) = p_\theta(Y_{1:T}) = \int p_\theta(x_0)p_\theta(x_{0:T} \mid x_0)\prod_{t=1}^Tp_\theta(Y_{t} \mid C_{t}) \ dX_{0:T}$$
-which averages the probability od observations over al trajectories in the stochastic model.
+which averages the probability of observations over all trajectories in the stochastic model.
 
 ### Particle Filtering
 A particle filter is used to estimate the hidden state of the CTMC using noisy observations. The latent state filtering distribution of the model
@@ -170,15 +170,15 @@ $$\widehat{logL}(\theta) = \sum_{t=1}^T\log\hat p_\theta(Y_t \mid Y_{1:t-1})$$
 which is stochastic because it depends on random trajectories and resampling. 
 
 ### Numerical Simulation
-The stochastic model is simulated numerically using an Euler multinomial step algorthm (EM). EM advances the epideic state over a fixed time interval $\Delta t$ by jointly sampling the number of individuals under going each transitiion. For a state transition with rate $r_1$, the probability an individual transitions during $\Delta t$ is
+The stochastic model is simulated numerically using an Euler multinomial step algorithm (EM). EM advances the epideic state over a fixed time interval $\Delta t$ by jointly sampling the number of individuals under going each transitiion. For a state transition with rate $r_1$, the probability an individual transitions during $\Delta t$ is
 
 $$p = 1-e^{-r \Delta t}$$
 
-Therefore for $n$ individuals in a compartment the number transitioning is samples from
+Therefore for $n$ individuals in a compartment the number transitioning is sampled from
 
 $$K \sim \text{Binomial}(n, p)$$
 
-Since individuals can transition through muliple mututally explucsinve paths, the transitions are sampled jointly using a multinomial distribution. For $J$ possible transition paths with probability $p_j$ the residual probability
+Since individuals can transition through muliple mututally exclusive paths, the transitions are sampled jointly using a multinomial distribution. For $J$ possible transition paths with probability $p_j$ the residual probability
 
 $$ p_0 = 1 - \sum_{i=1}^J p_j $$
 
