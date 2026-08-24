@@ -1,7 +1,17 @@
+# math
 numpy
 pandas
 scipy
+
+# visualization
 matplotlib
-pytest
 tqdm
+
+# config
 pyyaml
+
+# parallel workers
+joblib
+
+# testing
+pytest
