@@ -24,9 +24,15 @@ We run three primary counterfactual experiments on the vaccination rates. All ar
 
 The first simulation sustains the high levels of vaccine coverage that ultimately contributed to the eradication of measles. We set the 5 year old vaccination rate to 97% to be consistent with the hard vaccination rate for all public schools, and the 1 year old rate at 92% in line with the majority of people following the CDC recommended schedule. We treat this simulation as the baseline. 
 
+![Case simulations under a continuation of historical levels of coverage](./figures/high_coverage.png)
+
 The key scenario of interest shifts the majority of vaccination before school age from 2 years old as recommended by the CDC to 3 years old, following some common delayed schedules. School age vaccination is left at 97%.
 
+![Case simulations under delayed schedule](./figures/delayed_coverage.png)
+
 Finally, we simulate an extreme where vaccination only occurs at school age. 
+
+![Case simulations when only vaccinating at school age](./figures/delayed_coverage.png)
 
 We calculate the mean cumulative cases at 2000 particles over 25 years of simulation for all scenarios and compare the two delayed vaccination schedules to the high coverage baseline. Since all simulations are run with the same initial cloud and random seed, particle $i$ in both simulations shares the same random draws up to the vaccination treatment, so we pair particles for the paired sign flip permutation test. Holm-Bonferroni correction is applied to reduce false positive rates from repeated statistical tests.
 
